@@ -2,13 +2,15 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"log"
 	"net/http"
 
 	"github.com/mdlayher/apcupsd"
-	"github.com/mdlayher/apcupsd_exporter"
+	apcupsdexporter "github.com/mdlayher/apcupsd_exporter"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
@@ -30,7 +32,7 @@ func main() {
 
 	prometheus.MustRegister(apcupsdexporter.New(fn))
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	http.Handle(*metricsPath, promhttp.Handler())
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, *metricsPath, http.StatusMovedPermanently)
 	})
@@ -43,8 +45,8 @@ func main() {
 	}
 }
 
-func newClient(network string, addr string) apcupsdexporter.ClientFunc {
-	return func() (*apcupsd.Client, error) {
-		return apcupsd.Dial(network, addr)
+func newClient(network, addr string) apcupsdexporter.ClientFunc {
+	return func(ctx context.Context) (*apcupsd.Client, error) {
+		return apcupsd.DialContext(ctx, network, addr)
 	}
 }
