@@ -29,6 +29,7 @@ Prerequisites:
 ```
 $ docker run ghcr.io/twodarek/apcupsd_exporter:latest --expose 9162:9162 --env APCUPS_ADDR=<docker_host_ip>:3551
 ```
+Note: You can trade out `latest` for a specific commit sha to pin to that commit instead of using the automatically built `latest`, which will be current with the `master` branch.
 
 ## Example Prometheus config
 
