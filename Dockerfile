@@ -1,4 +1,6 @@
-FROM golang:1.17
+FROM golang:1.20
+
+RUN apt-get update -qq && apt-get upgrade -y -qq && apt-get autoremove -y && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY . ./
