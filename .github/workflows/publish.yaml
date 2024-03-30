@@ -3,6 +3,8 @@ name: Create and publish a Docker image
 on:
   push:
     branches: ['master']
+  schedule:
+    - cron: '28 9 * * 6'
 
 env:
   IMAGE_NAME: ${{ github.repository }}
@@ -18,16 +20,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Log in to the Container registry
+      - name: Log in to GHCR registry
         uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Log in to Docker Hub registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: hub.docker.com
+          username: ${{ secrets.DOCKER_HUB_USER }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: true
-          tags: ghcr.io/twodarek/apcupsd_exporter:latest,ghcr.io/twodarek/apcupsd_exporter:${{ github.sha }}
+          tags: ghcr.io/twodarek/apcupsd_exporter:latest,ghcr.io/twodarek/apcupsd_exporter:${{ github.sha }},thomaswo/apcups-exporter:latest
