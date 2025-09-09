@@ -1,6 +1,6 @@
 module github.com/twodarek/apcupsd_exporter
 
-go 1.21
+go 1.24
 
 require (
 	github.com/mdlayher/apcupsd v0.0.0-20230802135538-48f5030bcd58

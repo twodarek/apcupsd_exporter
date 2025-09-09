@@ -1,4 +1,4 @@
-FROM golang:1.21
+FROM golang:1.24
 
 RUN apt-get update -qq && apt-get upgrade -y -qq && apt-get autoremove -y && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
